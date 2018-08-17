@@ -1,3 +1,6 @@
+var player;
+var starfield;
+var cursors;
 class controls extends Phaser.Scene {
     constructor() {
         super({key: "controls"});
@@ -8,34 +11,38 @@ class controls extends Phaser.Scene {
         this.load.image('stars','assets/stars.jpg');
         this.load.image('laser','assets/bullets.png');
     }
-    
-    
-
 
     create(){
-        this.image = this.add.image(60,300, 'space');
+         this.starfield =  this.add.tileSprite(400,300,2000, 1200, 'stars');
+         this.player = this.add.sprite(75, 300, 'space'); 
+         cursors = this.input.keyboard.createCursorKeys();      
+    }
 
-        this.input.keyboard.on('keydown_D', function(event){
-            this.image.x +=10;
-        },this);
-
-        this.input.keyboard.on('keydown_A', function(event){
-            this.image.x -=10;
-        },this);
-
-        this.input.keyboard.on('keydown_S', function(event){
-            this.image.y +=10;
-        },this);
-
-        this.input.keyboard.on('keydown_W', function(event){
-            this.image.y -=10;
-        },this);
-
-        this.input.keyboard.on('keydown_P', function(event){
-            var physicsImage = this.physics.add.image(this.image.x, this.image.y, "laser");
-            physicsImage.setVelocity(2000, -75).setActive().setBounce(0);
-        },this)
+    update(){
+        this.starfield.tilePositionX += 4;
+        if (cursors.left.isDown) {
+			this.player.x -= 5;
+        } else if (cursors.right.isDown) {
+                this.player.x += 5;
+        } else if (cursors.up.isDown) {
+                this.player.y -= 5;
+        } else if (cursors.down.isDown) {
+                this.player.y += 5;
+        } 
+//////////////////////////////////////////////////////////////////////////
+         if (this.player.x < 50) {
+            this.player.x = 50;
+        }
+        if (this.player.y < 50) {
+            this.player.y = 50;
+        } 
         
+        if (this.player.x < 50) {
+            this.player.x = 50;
+        }
+        if (this.player.y < 50) {
+            this.player.y = 50;
+        }
     }
 
 }
