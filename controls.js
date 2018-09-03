@@ -2,7 +2,6 @@ var player;
 var starfield;
 var cursors;
 var enemies;
-var friendAndFoe;
 class controls extends Phaser.Scene {
     constructor() {
         super({key: "controls"});
@@ -12,6 +11,7 @@ class controls extends Phaser.Scene {
         this.load.image('space','assets/ship.png');
         this.load.image('stars','assets/stars.jpg');
         this.load.image('invader','assets/invader.png');
+        this.load.image('bullets','assets/bullets.png');
     }
 
     create(){       
@@ -20,56 +20,74 @@ class controls extends Phaser.Scene {
         this.starfield =  this.add.tileSprite(400,300,window.innerWidth, window.innerHeight, 'stars');
 
          //  The hero!
-        player = this.physics.add.image(100, 250, 'space');
-        player.setImmovable();
-        player.setCollideWorldBounds(true); 
+        this.player = this.physics.add.image(100, 250, 'space');
+        this.player.setImmovable();
+        this.player.setCollideWorldBounds(true); 
 
         //controlls
         cursors = this.input.keyboard.createCursorKeys();
 
-        //Enemies
-        this.friendAndFoe = this.add.group();
-    this.enemies = this.add.group();
+        //loading the spaceship
+        this.input.keyboard.on('keydown_P', function (event){
+            var bullets = this.physics.add.image(this.player.x, this.player.y, 'bullets');
+            bullets.setVelocity(400,0);
+        },this)
 
-    for (var i = 0; i < 16; i++)
-    {
-        //  This creates a new Phaser.Sprite instance within the group
-        //  It will be randomly placed within the world and use the 'baddie' image to display
-        this.enemies.create(360 + Phaser.Math.RND() * 200, 120  * 200, 'invader');
+        //adding enemies
+        enemies = this.physics.add.group({
+            key: 'invader',
+            frameQuantity: 24,
+            loop: true,
+            repeat: 6,
+
+            gridAlign: {
+                x: 825,
+                y: 25,
+                width: 4,
+                height: 24,
+                cellWidth: 100,
+                cellHeight: 100
+            },
+            collideWorldBounds: false
+        });
+    
+        ///enemies.children.iterate(function(child){
+            //child.setVelocityX(Phaser.Math.Between(-100,-300));
+        })
+        //enemies.setVelocityX(Phaser.Math.Between(-100,-300));
+
+        Phaser.Actions.Call(enemies.getChildren(), function(go) {
+            go.setVelocityX(Phaser.Math.Between(-100,-300))
+          })
+
     }
-
-    //  You can also add existing sprites to a group.
-    //  Here we'll create a local sprite called 'ufo'
-    var ufo = this.add.sprite(200, 240, 'ufo');
-
-    //  And then add it to the group
-    this.friendAndFoe.add(this.ufo);
-    }
-    update(time, delta){
+    update(){
 
         //  Scroll the background
-        this.starfield.tilePositionX += 10;
+        this.starfield.tilePositionX += 5;
         
         //player movement
-        player.setVelocity(0);
+        this.player.setVelocity(0);
         if (cursors.left.isDown)
         {
-            player.setVelocityX(-200);
+            this.player.setVelocityX(-200);
         }
         else if (cursors.right.isDown)
         {
-            player.setVelocityX(200);
+            this.player.setVelocityX(200);
         }
 
         if (cursors.up.isDown)
         {
-            player.setVelocityY(-200);
+            this.player.setVelocityY(-200);
         }
         else if (cursors.down.isDown)
         {
-            player.setVelocityY(200);
+            this.player.setVelocityY(200);
         }
-            
+
+         //adding collision
+        // this.game.physics.arcade.collide(bullets, enemies);      
      }
 
 }
