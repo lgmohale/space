@@ -2,6 +2,7 @@ var player;
 var starfield;
 var cursors;
 var enemies;
+var bullets;
 class controls extends Phaser.Scene {
     constructor() {
         super({key: "controls"});
@@ -29,7 +30,7 @@ class controls extends Phaser.Scene {
 
         //loading the spaceship
         this.input.keyboard.on('keydown_P', function (event){
-            var bullets = this.physics.add.image(this.player.x, this.player.y, 'bullets');
+             bullets = this.physics.add.image(this.player.x, this.player.y, 'bullets');
             bullets.setVelocity(400,0);
         },this)
 
@@ -53,12 +54,20 @@ class controls extends Phaser.Scene {
     
         ///enemies.children.iterate(function(child){
             //child.setVelocityX(Phaser.Math.Between(-100,-300));
-        })
         //enemies.setVelocityX(Phaser.Math.Between(-100,-300));
 
         Phaser.Actions.Call(enemies.getChildren(), function(go) {
             go.setVelocityX(Phaser.Math.Between(-100,-300))
           })
+
+          function collisionBody(enemies, player) {
+            if(enemies.counterActive(true)===0){
+                enemies.children.iterate(function(child){
+                    child.enablebody(true, child.x, o, true, true)
+                    //child.destroy;
+                    } )
+            }   
+        }
 
     }
     update(){
@@ -88,6 +97,15 @@ class controls extends Phaser.Scene {
 
          //adding collision
         // this.game.physics.arcade.collide(bullets, enemies);      
+        
      }
+     
 
 }
+
+
+
+
+
+
+
