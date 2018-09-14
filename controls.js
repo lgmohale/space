@@ -3,6 +3,12 @@ var starfield;
 var cursors;
 var enemies;
 var bullets;
+var hitBomb;
+var lives = 3;
+var liveText;
+var PlayerEnemyCollision;
+var i;
+var levelStopped = false;
 class controls extends Phaser.Scene {
     constructor() {
         super({key: "controls"});
@@ -58,19 +64,21 @@ class controls extends Phaser.Scene {
 
         Phaser.Actions.Call(enemies.getChildren(), function(go) {
             go.setVelocityX(Phaser.Math.Between(-100,-300))
-          })
+          });
 
-          function collisionBody(enemies, player) {
-            if(enemies.counterActive(true)===0){
-                enemies.children.iterate(function(child){
-                    child.enablebody(true, child.x, o, true, true)
-                    //child.destroy;
-                    } )
-            }   
-        }
+          //collion of player and enemies
+          this.physics.add.collider(this.player, enemies, PlayerEnemyCollision,null,this);
 
+          
+
+
+          
     }
     update(){
+
+        if(levelStopped) {
+            return;
+        }
 
         //  Scroll the background
         this.starfield.tilePositionX += 5;
@@ -94,9 +102,6 @@ class controls extends Phaser.Scene {
         {
             this.player.setVelocityY(200);
         }
-
-         //adding collision
-        // this.game.physics.arcade.collide(bullets, enemies);      
         
      }
      
@@ -104,8 +109,23 @@ class controls extends Phaser.Scene {
 }
 
 
+function PlayerEnemyCollision(player, enemies){
+    enemies.disableBody(true, true);
 
+lives -=1;
+if( lives == 0){
+    console.log("lives reaches 0");
+    restartLevel(player);
+    
+}
 
+function restartLevel(player) {
+    console.log("in restartLevel");
+    levelStopped = true;
+    game.scene.stop('controls');
+    game.scene.start('controls');
 
-
-
+    levelStopped = false;
+    lives = 3;
+}
+}

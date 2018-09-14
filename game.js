@@ -8,7 +8,7 @@ var config = {
             gravity: {x: 0}
         }
     },
-    scene: [controls]
+    scene: [StartScreen, controls]
 }
 
 
