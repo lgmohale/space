@@ -3,11 +3,13 @@ var starfield;
 var cursors;
 var enemies;
 var bullets;
-var hitBomb;
 var lives = 3;
-var liveText;
-var PlayerEnemyCollision;
-var i;
+var Player;
+var score = 0;
+var scoreText;
+var livesText;
+var gameoverText;
+// var gameOver;
 var levelStopped = false;
 class controls extends Phaser.Scene {
     constructor() {
@@ -27,26 +29,26 @@ class controls extends Phaser.Scene {
         this.starfield =  this.add.tileSprite(400,300,window.innerWidth, window.innerHeight, 'stars');
 
          //  The hero!
-        this.player = this.physics.add.image(100, 250, 'space');
+        this.player = this.physics.add.image(25, 250, 'space');
         this.player.setImmovable();
         this.player.setCollideWorldBounds(true); 
 
         //controlls
         cursors = this.input.keyboard.createCursorKeys();
+        bullets = this.physics.add.group();
 
         //loading the spaceship
         this.input.keyboard.on('keydown_P', function (event){
-             bullets = this.physics.add.image(this.player.x, this.player.y, 'bullets');
-            bullets.setVelocity(400,0);
+             var bullet = bullets.create(this.player.x, this.player.y, 'bullets');
+            bullet.setVelocity(400,0);
         },this)
+
+
 
         //adding enemies
         enemies = this.physics.add.group({
             key: 'invader',
             frameQuantity: 24,
-            loop: true,
-            repeat: 6,
-
             gridAlign: {
                 x: 825,
                 y: 25,
@@ -69,10 +71,27 @@ class controls extends Phaser.Scene {
           //collion of player and enemies
           this.physics.add.collider(this.player, enemies, PlayerEnemyCollision,null,this);
 
-          
+          //collison between bullets and enemies
+          this.physics.add.overlap(bullets, enemies, BulletsEnemyCollision,null,this);
 
-
+          //displays score
+           scoreText = this.add.text(25,50,'SCORE: ' + score,{
+            fontSize: '16px',
+            fill: '#FFF'
+          });
           
+          //Displays lives
+          livesText = this.add.text(25, 25, 'LIVES: ' + lives,{
+              fontSize: '16px',
+              fill: '#fff'
+          });
+
+          //
+          gameoverText = this.add.text(300,200,'',{
+            fontSize: '32px',
+            fill: '#fff'
+          });
+
     }
     update(){
 
@@ -80,7 +99,7 @@ class controls extends Phaser.Scene {
             return;
         }
 
-        //  Scroll the background
+        //Scroll the background
         this.starfield.tilePositionX += 5;
         
         //player movement
@@ -102,30 +121,54 @@ class controls extends Phaser.Scene {
         {
             this.player.setVelocityY(200);
         }
+
+        //setInterval(enemyGenerator, 4000);
         
      }
+
+     //
+
      
 
 }
 
-
+//collision between player and the enemy
 function PlayerEnemyCollision(player, enemies){
     enemies.disableBody(true, true);
 
 lives -=1;
-if( lives == 0){
-    console.log("lives reaches 0");
-    restartLevel(player);
-    
+livesText.setText('LIVE: ' + lives)
+ if(lives == 0){
+    restartLevel();
+    gameoverText.setText('GAME OVER!!!')
+
+ }
 }
 
 function restartLevel(player) {
     console.log("in restartLevel");
     levelStopped = true;
-    game.scene.stop('controls');
-    game.scene.start('controls');
-
+    game.scene.pause('controls');
     levelStopped = false;
     lives = 3;
+    livesText.setText('LIVE: ' + lives);
 }
+
+
+
+//collision between bullets and the enemy
+function BulletsEnemyCollision(bullets, enemies){
+    score +=10;
+    console.log("score: "+ score)
+    scoreText.setText('Score: ' + score)
+    enemies.disableBody(true, true);
+    bullets.disableBody(true, true);
+    
 }
+
+// function enemyGenerator(){
+//     for(var i = 0; i<10; i++){
+//         var enem = enemies.create(enemies.x, enem.y ,'invader');
+//         enem.setVelocity(400,0);
+//     }
+// }
