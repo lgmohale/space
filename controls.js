@@ -48,26 +48,29 @@ class controls extends Phaser.Scene {
         //adding enemies
         enemies = this.physics.add.group({
             key: 'invader',
-            frameQuantity: 24,
+            frameQuantity: 5000,
             gridAlign: {
                 x: 825,
                 y: 25,
-                width: 4,
-                height: 24,
+                width: 30,
+                height: 96,
                 cellWidth: 100,
                 cellHeight: 100
             },
             collideWorldBounds: false
         });
-    
-        ///enemies.children.iterate(function(child){
-            //child.setVelocityX(Phaser.Math.Between(-100,-300));
-        //enemies.setVelocityX(Phaser.Math.Between(-100,-300));
+
+
+        // enemies.children.iterate(function(child){
+        //     child.setVelocityX(Phaser.Math.Between(-100,-300));
+        // enemies.setVelocityX(Phaser.Math.Between(-100,-300));
 
         Phaser.Actions.Call(enemies.getChildren(), function(go) {
             go.setVelocityX(Phaser.Math.Between(-100,-300))
           });
 
+
+      
           //collion of player and enemies
           this.physics.add.collider(this.player, enemies, PlayerEnemyCollision,null,this);
 
@@ -137,13 +140,12 @@ function PlayerEnemyCollision(player, enemies){
     enemies.disableBody(true, true);
 
 lives -=1;
-livesText.setText('LIVE: ' + lives)
- if(lives == 0){
-    restartLevel();
-    gameoverText.setText('GAME OVER!!!')
-
- }
-}
+livesText.setText('LIVE: ' + lives);
+    if(lives == 0){
+        restartLevel();
+        gameoverText.setText('GAME OVER!!!');
+    };
+};
 
 function restartLevel(player) {
     console.log("in restartLevel");
@@ -152,7 +154,7 @@ function restartLevel(player) {
     levelStopped = false;
     lives = 3;
     livesText.setText('LIVE: ' + lives);
-}
+};
 
 
 
@@ -163,12 +165,16 @@ function BulletsEnemyCollision(bullets, enemies){
     scoreText.setText('Score: ' + score)
     enemies.disableBody(true, true);
     bullets.disableBody(true, true);
+    //
+    if(score == 120){
+        Nextleve();
+        console.log('next level');
+        gameoverText.setText('WELL DONE!!!');
+    };
     
-}
+};
 
-// function enemyGenerator(){
-//     for(var i = 0; i<10; i++){
-//         var enem = enemies.create(enemies.x, enem.y ,'invader');
-//         enem.setVelocity(400,0);
-//     }
-// }
+function Nextleve(){
+    game.scene.pause('controls');
+    game.scene.start('level2');
+};
