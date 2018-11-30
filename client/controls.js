@@ -138,7 +138,6 @@ class controls extends Phaser.Scene {
 //collision between player and the enemy
 function PlayerEnemyCollision(player, enemies){
     enemies.disableBody(true, true);
-
 lives -=1;
 livesText.setText('LIVE: ' + lives);
     if(lives == 0){
@@ -169,7 +168,7 @@ function BulletsEnemyCollision(bullets, enemies){
     if(score == 120){
         Nextleve();
         console.log('next level');
-        gameoverText.setText('WELL DONE!!!');
+        gameoverText.setText('MISSION COMPLETE!!!');
     };
     
 };
