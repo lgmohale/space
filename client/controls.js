@@ -17,10 +17,10 @@ class controls extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('space','assets/ship.png');
-        this.load.image('stars','assets/stars.jpg');
-        this.load.image('invader','assets/invader.png');
-        this.load.image('bullets','assets/bullets.png');
+        this.load.image('space','client/assets/ship.png');
+        this.load.image('stars','client/assets/stars.jpg');
+        this.load.image('invader','client/assets/invader.png');
+        this.load.image('bullets','client/assets/bullets.png');
     }
 
     create(){       
