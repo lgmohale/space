@@ -6,13 +6,13 @@ class instructions extends Phaser.Scene {
     }
     preload() {
       console.log("instruction page");
-      this.load.image('ship','client/assets/spaces.jpg');
+      this.load.image('ship','client/assets/dark.png');
   
     }
     create() {
         
-    //     var bg = this.add.image(400, 300, 'ship');
-    // bg.setScale(800/bg.width, 600/bg.height);
+        var bg = this.add.image(400, 300, 'ship');
+    bg.setScale(800/bg.width, 600/bg.height);
     
       var testText = this.add.text(80,100,'GAME INSTRUCTIONS.',{
         fontSize: '32px',
@@ -24,7 +24,7 @@ pra = this.add.text(80,140,'The aim of this game is to destory as many enamies s
     fontSize: '16px',
     fill: '#FFF'
   });
-  pra = this.add.text(80,180,' move to the next stage',{
+  pra = this.add.text(80,180,'move to the next stage',{
     fontSize: '16px',
     fill: '#FFF'
   });

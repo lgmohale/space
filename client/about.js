@@ -6,14 +6,14 @@ class about extends Phaser.Scene {
     }
     preload() {
       console.log("about page");
-      this.load.image('ship','client/assets/spaces.jpg');
+      this.load.image('ship','client/assets/dark.png');
   
     }
     create() {
       var pra1;
       var par2;
-      // var bg = this.add.image(400, 300, 'ship');
-      // bg.setScale(800/bg.width, 600/bg.height);
+      var bg = this.add.image(400, 300, 'ship');
+      bg.setScale(800/bg.width, 600/bg.height);
     
       var testText = this.add.text(80,100,'ABOUT THE GAME.',{
         fontSize: '32px',

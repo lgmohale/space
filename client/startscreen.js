@@ -6,13 +6,13 @@ class StartScreen extends Phaser.Scene {
   }
   preload() {
     console.log("Start screen");
-    this.load.image('ship','client/assets/spaces.jpg');
+    this.load.image('ship','client/assets/dark.png');
 
   }
   create() {
 
-    // var bg = this.add.image(400, 300, 'ship');
-    // bg.setScale(800/bg.width, 600/bg.height);
+    var bg = this.add.image(400, 300, 'ship');
+    bg.setScale(800/bg.width, 600/bg.height);
     var testText = this.add.text(250,100,'SPACE-IMPACT III.',{
       fontSize: '32px',
       fill: '#FFF'
